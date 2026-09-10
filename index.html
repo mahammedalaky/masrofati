@@ -109,7 +109,6 @@ button:disabled{opacity:.55;cursor:not-allowed}
  <div style="text-align:center">
   <img src="icons/icon-192.png" alt="">
   <p class="splash-title">مصروفاتي 🎤</p>
-  <p class="splash-credit">تصميم م. محمد الصديق العكى</p>
  </div>
 </div>
 
@@ -418,17 +417,21 @@ function setCountry(id){
 }
 
 /* ============ التصنيفات ============ */
+// عند إنشاء تصنيف باسم شائع يدويًا، نضيف له كلمات تعرّف صوتي جاهزة (بدون ما يكون مضاف افتراضيًا)
+const SUGGESTED_KEYWORDS = {
+ 'طعام':['غدا','عشا','فطور','اكل','أكل','مطعم','قهوة','كوفي','بيتزا','برجر','وجبة'],
+ 'food':['lunch','dinner','breakfast','food','restaurant','coffee','pizza','burger','meal'],
+ 'مواصلات':['تكسي','باص','بنزين','وقود','سيارة','سياره','تاكسي'],
+ 'transport':['taxi','bus','gas','fuel','car'],
+ 'فواتير':['فاتورة','كهرباء','ماء','نت','انترنت','هاتف','تليفون'],
+ 'bills':['bill','electricity','water','internet','phone'],
+ 'تسوق':['ملابس','سوق','مشتريات'],
+ 'shopping':['clothes','market','shop'],
+ 'صحة':['دواء','صيدلية','طبيب','عيادة','عياده','مستشفى'],
+ 'health':['medicine','pharmacy','doctor','clinic','hospital']
+};
+// التصنيف الوحيد الموجود عند أول تشغيل — البقية يضيفها المستخدم بنفسه
 const DEFAULT_CATEGORIES = [
- {id:'food', ar:'طعام', en:'Food', protected:false, budget:0,
-  keywords:['غدا','عشا','فطور','اكل','أكل','مطعم','قهوة','كوفي','بيتزا','برجر','وجبة','lunch','dinner','breakfast','food','restaurant','coffee','pizza','burger','meal']},
- {id:'transport', ar:'مواصلات', en:'Transport', protected:false, budget:0,
-  keywords:['مواصلات','تكسي','باص','بنزين','وقود','سيارة','سياره','تاكسي','transport','taxi','bus','gas','fuel','car']},
- {id:'bills', ar:'فواتير', en:'Bills', protected:false, budget:0,
-  keywords:['فاتورة','فواتير','كهرباء','ماء','نت','انترنت','هاتف','تليفون','bill','bills','electricity','water','internet','phone']},
- {id:'shopping', ar:'تسوق', en:'Shopping', protected:false, budget:0,
-  keywords:['تسوق','ملابس','سوق','مشتريات','shopping','clothes','market','shop']},
- {id:'health', ar:'صحة', en:'Health', protected:false, budget:0,
-  keywords:['دواء','صيدلية','طبيب','عيادة','عياده','مستشفى','medicine','pharmacy','doctor','clinic','hospital']},
  {id:'other', ar:'مصروفات عامة', en:'General expenses', protected:true, budget:0, keywords:[]}
 ];
 let categories = [];
@@ -452,7 +455,9 @@ function addCategory(){
  if(exists){ showAlertModal(tr('duplicateCategory')); return; }
  let budget = parseFloat(budgetInput.value);
  if(isNaN(budget) || budget<0) budget = 0;
- categories.push({ id:'c'+Date.now(), ar:name, en:name, custom:true, protected:false, budget, keywords:[name.toLowerCase()] });
+ const preset = SUGGESTED_KEYWORDS[name] || SUGGESTED_KEYWORDS[name.toLowerCase()] || [];
+ const keywords = [name.toLowerCase()].concat(preset);
+ categories.push({ id:'c'+Date.now(), ar:name, en:name, custom:true, protected:false, budget, keywords });
  saveCategories();
  nameInput.value=''; budgetInput.value='';
  renderAll();
