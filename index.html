@@ -156,8 +156,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
    <button id="langEnBtn" onclick="setLang('en')">EN</button>
   </div>
  </div>
- <h1 id="appTitle" style="margin:14px 0 6px"></h1>
- <p id="periodCaption" style="margin:0 0 8px;font-size:12px;opacity:.8"></p>
+ <p id="periodCaption" style="margin:14px 0 8px;font-size:12px;opacity:.8"></p>
  <p style="margin:4px 0"><span id="budgetLabel"></span>: <span id="b">0</span> <span class="cur"></span></p>
  <p style="margin:4px 0"><span id="spentLabel"></span>: <span id="s">0</span> <span class="cur"></span></p>
  <div class="bar-outer"><div class="bar-inner" id="bar" style="width:0%"></div></div>
@@ -169,15 +168,13 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
 <div class="card">
 <h2 id="categoriesHeader"></h2>
-<div id="categoryList" class="cat-scroll"></div>
-<div id="categoryTotalRow" class="cat-total-row"></div>
-<p id="tapCategoryHintEl" class="hint"></p>
-<p id="categoryBudgetHint" class="hint"></p>
 <div class="row">
  <input id="newCategoryInput">
  <input id="newCategoryBudget" type="number" inputmode="decimal" style="flex:0 0 110px">
  <button onclick="addCategory()" id="addCategoryBtn" style="flex:0 0 auto;width:auto;padding:14px 18px"></button>
 </div>
+<div id="categoryList" class="cat-scroll"></div>
+<div id="categoryTotalRow" class="cat-total-row"></div>
 </div>
 
 <div class="card">
@@ -276,7 +273,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 /* ============ الترجمة ============ */
 const T = {
  ar: {
-  appTitle:'مصروفاتي 🎤', budgetLabel:'إجمالي الميزانية', spentLabel:'المصروف', currency:'د.ل',
+  budgetLabel:'إجمالي الميزانية', spentLabel:'المصروف', currency:'د.ل',
   periodCaption:'ميزانية وصرف هذا الشهر (حسب ميزانية كل تصنيف)',
   navHome:'🏠 الرئيسية', navReports:'📊 التقارير', navSettings:'⚙️ الإعدادات', backBtn:'‹ رجوع',
   addExpenseHeader:'إضافة مصروف صوتي', voiceBtn:'🎤 اضغط وتكلم',
@@ -285,7 +282,7 @@ const T = {
   textPlaceholder:'النص الملتقط', categoryLabel:'التصنيف',
   manualSaveHint:'✍️ اكتب النص واضغط Enter لحفظه، أو 🎤 تكلم ليُسجل تلقائيًا فور التقاط الصوت',
   categoriesHeader:'التصنيفات', newCategoryPlaceholder:'اسم تصنيف جديد', budgetPlaceholderShort:'الميزانية',
-  addCategoryBtn:'إضافة', categoryBudgetHint:'حدد ميزانية شهرية لأي تصنيف (اختياري) — تقدر تعدّلها بأي وقت. الأرقام تحت كل تصنيف عن الشهر الحالي',
+  addCategoryBtn:'إضافة',
   deleteCategoryConfirm:'حذف هذا التصنيف؟ مصروفاته السابقة تنتقل لتصنيف "مصروفات عامة"',
   cannotDeleteProtected:'ما تقدر تحذف هذا التصنيف',
   duplicateCategory:'هذا التصنيف موجود أصلاً',
@@ -297,7 +294,6 @@ const T = {
   confirmYesBtn:'نعم، أكمل الخصم', confirmNoBtn:'لا، تراجع', statusAwaitingConfirm:'بانتظار تأكيدك...', okBtn:'موافق',
   confirmYesDelete:'نعم، احذف', confirmYesClearAll:'نعم، امسح الكل', confirmYesImport:'نعم، استورد',
   voiceNotSupportedAlert:'المتصفح لا يدعم التعرف على الصوت، جرّب متصفح Chrome',
-  tapCategoryHint:'اضغط على أي تصنيف لتحديده كوجهة الصرف قبل ما تسجل مصروف صوتي أو نصي، وبيُخصم منه هو بس',
   reportsHeader:'التقارير', reportFilterPrefix:'🎯 تقرير عن:', tabDaily:'يومي', tabMonthly:'شهري', tabAll:'الكل',
   dailyDateLabel:'اختر اليوم', monthlyDateLabel:'اختر الشهر',
   noExpensesMsg:'لا توجد مصروفات', totalForPeriod:(x,cur)=>`الإجمالي: ${x} ${cur}`,
@@ -308,7 +304,6 @@ const T = {
   amountNotDetectedAlert:'ما قدرتش أحدد المبلغ من النص، عدّله وحاول مرة ثانية',
   previewDetected:(a,cur,c)=>`المبلغ المكتشف: ${a} ${cur} — التصنيف: ${c}`,
   previewNotDetected:'ما قدرتش أحدد المبلغ، جرّب تذكر الرقم بوضوح',
-  neutralBanner:'حدد ميزانية لأي تصنيف تحت عشان نقدر نتابعها معاك',
   overBanner:(x,cur)=>`⚠️ تجاوزت الميزانية بمقدار ${x} ${cur}`,
   midBanner:(x,cur)=>`⚠️ اقتربت من حد ميزانيتك، تبقى لك ${x} ${cur} فقط`,
   okBanner:(x,cur)=>`متبقي لك ${x} ${cur}`,
@@ -327,7 +322,7 @@ const T = {
   importSuccessAlert:'تم الاستيراد بنجاح، بيتم تحديث الصفحة', importErrorAlert:'ملف غير صالح'
  },
  en: {
-  appTitle:'My Expenses 🎤', budgetLabel:'Total budget', spentLabel:'Spent', currency:'LYD',
+  budgetLabel:'Total budget', spentLabel:'Spent', currency:'LYD',
   periodCaption:"This month's budget & spending (based on each category's budget)",
   navHome:'🏠 Home', navReports:'📊 Reports', navSettings:'⚙️ Settings', backBtn:'‹ Back',
   addExpenseHeader:'Add expense by voice', voiceBtn:'🎤 Tap and speak',
@@ -336,7 +331,7 @@ const T = {
   textPlaceholder:'Captured text', categoryLabel:'Category',
   manualSaveHint:"✍️ Type the text and press Enter to save it, or 🎤 speak to record it automatically once captured",
   categoriesHeader:'Categories', newCategoryPlaceholder:'New category name', budgetPlaceholderShort:'Budget',
-  addCategoryBtn:'Add', categoryBudgetHint:"Set a monthly budget for any category (optional) — editable anytime. The numbers under each category are for the current month",
+  addCategoryBtn:'Add',
   deleteCategoryConfirm:'Delete this category? Its past expenses move to "General expenses"',
   cannotDeleteProtected:"You can't delete this category",
   duplicateCategory:'This category already exists',
@@ -348,7 +343,6 @@ const T = {
   confirmYesBtn:'Yes, proceed', confirmNoBtn:'No, cancel', statusAwaitingConfirm:'Awaiting your confirmation...', okBtn:'OK',
   confirmYesDelete:'Yes, delete', confirmYesClearAll:'Yes, clear all', confirmYesImport:'Yes, import',
   voiceNotSupportedAlert:"This browser doesn't support voice recognition, try Chrome",
-  tapCategoryHint:"Tap any category to set it as the spending target before recording a voice or text expense — it'll be deducted from that one only",
   reportsHeader:'Reports', reportFilterPrefix:'🎯 Report for:', tabDaily:'Daily', tabMonthly:'Monthly', tabAll:'All',
   dailyDateLabel:'Pick a day', monthlyDateLabel:'Pick a month',
   noExpensesMsg:'No expenses', totalForPeriod:(x,cur)=>`Total: ${x} ${cur}`,
@@ -359,7 +353,6 @@ const T = {
   amountNotDetectedAlert:"Couldn't detect the amount, edit and try again",
   previewDetected:(a,cur,c)=>`Detected amount: ${a} ${cur} — Category: ${c}`,
   previewNotDetected:"Couldn't detect the amount, try stating the number clearly",
-  neutralBanner:'Set a budget for any category below so we can track it with you',
   overBanner:(x,cur)=>`⚠️ Over budget by ${x} ${cur}`,
   midBanner:(x,cur)=>`⚠️ Close to your budget limit, only ${x} ${cur} left`,
   okBanner:(x,cur)=>`You have ${x} ${cur} left`,
@@ -1006,7 +999,6 @@ function formatDate(iso){
 }
 
 function applyStaticText(){
- document.getElementById('appTitle').innerText = tr('appTitle');
  document.getElementById('budgetLabel').innerText = tr('budgetLabel');
  document.getElementById('spentLabel').innerText = tr('spentLabel');
  document.querySelectorAll('.cur').forEach(el=>el.innerText = currency());
@@ -1026,8 +1018,6 @@ function applyStaticText(){
  document.getElementById('newCategoryInput').placeholder = tr('newCategoryPlaceholder');
  document.getElementById('newCategoryBudget').placeholder = tr('budgetPlaceholderShort');
  document.getElementById('addCategoryBtn').innerText = tr('addCategoryBtn');
- document.getElementById('categoryBudgetHint').innerText = tr('categoryBudgetHint');
- document.getElementById('tapCategoryHintEl').innerText = tr('tapCategoryHint');
  document.getElementById('reportsHeader').innerText = tr('reportsHeader');
  document.getElementById('tabDailyBtn').innerText = tr('tabDaily');
  document.getElementById('tabMonthlyBtn').innerText = tr('tabMonthly');
@@ -1129,9 +1119,9 @@ function renderHeader(){
  const banner = document.getElementById('banner');
  if(budget<=0){
   bar.style.width='0%';
-  banner.className='banner neutral';
-  banner.innerText=tr('neutralBanner');
+  banner.hidden = true;
  } else {
+  banner.hidden = false;
   const pct = Math.min(100, (spent/budget)*100);
   bar.style.width = pct+'%';
   if(spent>budget){
